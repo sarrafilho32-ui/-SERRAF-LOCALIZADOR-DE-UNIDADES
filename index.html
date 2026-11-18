@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Serraf | Localizador de Unidades</title>
+<style>
+:root{--blue:#0756a5;--blue2:#0b72c8;--navy:#082d52;--sky:#eaf4ff;--ink:#14283e;--muted:#63758a;--line:#d9e5f1;--bg:#f3f7fb;--white:#fff;--green:#16845b;--shadow:0 12px 32px #0a376012}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font:15px/1.5 Inter,Arial,sans-serif;color:var(--ink)}
+header{background:linear-gradient(115deg,#062b50,#0756a5 62%,#1684cf);color:#fff;padding:25px 20px}
+.wrap{max-width:1080px;margin:auto}.brand{display:flex;align-items:center;gap:13px}.mark{width:48px;height:48px;border-radius:14px;background:#ffffff1c;border:1px solid #ffffff55;display:grid;place-items:center;font-size:26px;font-weight:900}.brand h1{font-size:23px;margin:0;letter-spacing:.2px}.brand p{margin:2px 0 0;color:#d8ebff;font-size:13px}
+main{max-width:1080px;margin:24px auto;padding:0 17px 50px}.intro{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:18px}.intro h2{margin:0;font-size:23px}.intro p{margin:4px 0 0;color:var(--muted)}.pill{background:#e4f2ff;color:#0756a5;border-radius:99px;padding:6px 11px;font-weight:700;font-size:12px;white-space:nowrap}
+.panel{background:var(--white);border:1px solid var(--line);border-radius:17px;padding:21px;margin-bottom:17px;box-shadow:var(--shadow)}
+.panelhead{display:flex;align-items:center;gap:10px;margin-bottom:15px}.ico{width:36px;height:36px;border-radius:11px;background:var(--sky);color:var(--blue);display:grid;place-items:center;font-size:18px}.panel h3{margin:0;font-size:18px}.sub{color:var(--muted);font-size:13px;margin:3px 0 0}
+label{display:block;font-weight:700;margin-bottom:7px;font-size:13px}input{width:100%;padding:13px 14px;border:1px solid #cbd9e7;border-radius:10px;font-size:16px;color:var(--ink);background:#fff;outline:none}input:focus{border-color:var(--blue2);box-shadow:0 0 0 3px #0b72c81c}
+.searchrow{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end}.searchrow-nearest{grid-template-columns:minmax(190px,1fr) minmax(210px,.9fr) auto}.field{min-width:0}
+.nearest-preview{min-height:66px;padding:8px 10px;border:1px solid #d8e5ef;background:#f8fbff;border-radius:12px;display:grid;grid-template-columns:1.2fr .8fr 1fr;gap:8px;align-items:stretch;min-width:0}
+.nearest-part{min-width:0;display:flex;flex-direction:column;justify-content:center;gap:3px}
+.nearest-part+.nearest-part{border-left:1px solid #dce5ee;padding-left:9px}
+.nearest-label{font-size:9px;letter-spacing:.45px;font-weight:800;color:#63758a;line-height:1.2}
+.nearest-preview strong{font-size:13px;color:#11663d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nearest-preview small{font-size:11px;color:#63758a;line-height:1.2}
+.nearest-part.freight{background:#fff0f0;border:1px solid #f1cccc;border-radius:8px;padding:5px 7px}
+.nearest-part.freight .nearest-label{color:#ad4141}
+.nearest-part.freight strong{font-size:13px;color:#bd3535}
+@media(max-width:650px){.nearest-preview{grid-template-columns:1.15fr .75fr 1fr;gap:5px;padding:7px}.nearest-part+.nearest-part{padding-left:5px}.nearest-preview strong{font-size:11px}.nearest-label{font-size:8px}.nearest-preview small{font-size:10px}}
+button{border:0;border-radius:10px;padding:13px 17px;background:var(--blue);color:white;font-weight:700;cursor:pointer;font-size:14px;transition:.15s}button:hover{background:var(--blue2)}button:disabled{opacity:.6;cursor:wait}.secondary{background:#e8f2fc;color:var(--blue)}.secondary:hover{background:#d9eaff}.danger{background:#fff0f0;color:#b42318;padding:8px 11px}.danger:hover{background:#ffe1e1}
+.status{margin:13px 0 0;color:var(--muted);font-size:13px}.destination{margin-top:12px;padding:11px 13px;background:#f4f9ff;border:1px solid #dcecff;border-radius:10px;font-size:14px}
+.resulthead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:20px 0 12px}.resulthead h4{margin:0;font-size:16px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:11px}
+.unit{border:1px solid var(--line);border-radius:13px;padding:14px;background:#fff;min-height:110px}.unit.best{border:2px solid var(--blue2);background:linear-gradient(145deg,#f2f8ff,#fff)}.rank{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--blue);font-weight:800}.unitname{font-size:17px;font-weight:800;margin:5px 0}.distance{font-size:21px;font-weight:800;color:var(--navy)}.distance small{font-size:11px;color:var(--muted);font-weight:500}.unitmeta{font-size:12px;color:var(--muted);margin-top:4px}
+.unitfreight{margin-top:10px;padding:8px 10px;border:1px solid #f3caca;background:#fff1f1;border-radius:9px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.unitfreight span{font-size:10px;font-weight:800;letter-spacing:.25px;color:#b54747}
+.unitfreight strong{font-size:14px;color:#c24141;white-space:nowrap}
+.unitfreight.missing{background:#fff7f7;border-color:#f2dddd}
+.unitfreight.missing strong{font-size:11px;color:#a65b5b}
+
+.unitsgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px}.unitrow{display:flex;align-items:center;justify-content:space-between;gap:8px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13px}.unitrow strong{display:block}.unitrow small{color:var(--muted)}
+.settings{border-top:1px solid var(--line);padding-top:18px;margin-top:18px}.formgrid{display:grid;grid-template-columns:1.1fr 1fr auto;gap:10px;align-items:end}.helper{font-size:12px;color:var(--muted);margin-top:8px}
+.fee-total{font-size:21px;font-weight:800;color:#0756a5}.fee-detail{color:#63758a;font-size:13px}
+.notice{background:#fff8e8;border:1px solid #f1dfad;color:#735817;padding:13px;border-radius:11px;font-size:13px;margin-top:15px}
+.empty{padding:20px;text-align:center;color:var(--muted);border:1px dashed #cbd9e7;border-radius:12px}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:15px}
+@media(max-width:650px){header{padding:20px 16px}.brand h1{font-size:19px}.intro{display:block}.pill{display:inline-block;margin-top:10px}.searchrow,.searchrow-nearest,.formgrid{grid-template-columns:1fr}.searchrow button,.formgrid button{width:100%}.panel{padding:16px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.unit{padding:11px}.unitname{font-size:15px}}
+</style></head>
+<body>
+<header><div class="wrap brand"><div class="mark">S</div><div><h1>SERRAF | LOCALIZADOR DE UNIDADES</h1><p>Proximidade, apoio logístico e atendimento comercial</p></div></div></header>
+<main>
+<div class="intro"><div><h2>Encontre a unidade mais próxima</h2><p>Informe o CEP do cliente para comparar as unidades Serraf.</p></div><span class="pill">26 unidades cadastradas</span></div>
+
+<section class="panel">
+ <div class="panelhead"><div class="ico">⌖</div><div><h3>Consultar CEP do cliente</h3><p class="sub">A busca identifica o endereço e estima a proximidade das unidades.</p></div></div>
+ <div class="searchrow searchrow-nearest"><div class="field"><label for="cep">CEP do cliente</label><input id="cep" inputmode="numeric" maxlength="9" placeholder="Ex.: 19165-744"></div><div class="nearest-preview" id="nearestPreview" aria-live="polite">
+  <div class="nearest-part"><span class="nearest-label">CIDADE MAIS PRÓXIMA</span><strong id="nearestName">Aguardando CEP</strong><small>Unidade Serraf</small></div>
+  <div class="nearest-part"><span class="nearest-label">DISTÂNCIA</span><strong id="nearestDistance">—</strong><small>em linha reta</small></div>
+  <div class="nearest-part freight"><span class="nearest-label">FRETE APROXIMADO</span><strong id="nearestFreight">—</strong><small>valor estimado</small></div>
+</div><button id="go">Comparar unidades →</button></div>
+ <p id="status" class="status" aria-live="polite">Digite um CEP com 8 números para iniciar a consulta.</p><div id="destination"></div><div id="result"></div>
+</section>
+
+
+<section class="panel" id="freightPanel">
+ <div class="panelhead"><div class="ico">R$</div><div><h3>Tabela de frete por distância</h3><p class="sub">Cadastre uma taxa para cada faixa de quilômetros. O sistema aplica automaticamente a faixa da unidade mais próxima.</p></div></div>
+ <div class="destination" id="freightApplied"><b>Frete estimado:</b> aguardando consulta de CEP.</div>
+ <div class="settings">
+  <div class="formgrid">
+   <div class="field"><label for="rangeFrom">De (km)</label><input id="rangeFrom" type="number" min="0" step="1" value="0"></div>
+   <div class="field"><label for="rangeTo">Até (km)</label><input id="rangeTo" type="number" min="1" step="1" value="100"></div>
+   <div class="field"><label for="rangePrice">Taxa (R$)</label><input id="rangePrice" type="number" min="0" max="10000" step="0.01" value="25"></div>
+  </div>
+  <button id="saveRange" style="margin-top:10px">+ Salvar faixa de frete</button>
+  <div id="freightRanges" style="margin-top:14px"></div>
+  <p class="helper">Exemplo: 0–100 km = R$ 25,00; 100–200 km = R$ 40,00. Você define os valores. As faixas são salvas neste navegador e podem ser alteradas ou excluídas.</p>
+ </div>
+ <p class="helper">Estimativa calculada pela distância em linha reta entre o CEP do cliente e a referência cadastrada da unidade. Não é cotação de transportadora nem distância rodoviária.</p>
+</section>
+
+<section class="panel">
+ <div class="panelhead"><div class="ico">▦</div><div><h3>Unidades cadastradas</h3><p class="sub">Relação das unidades consideradas na comparação.</p></div></div>
+ <div id="units" class="unitsgrid"></div>
+ <div class="settings">
+  <div class="panelhead"><div class="ico">⚙</div><div><h3>Configurações · Adicionar unidade</h3><p class="sub">Cadastre uma nova unidade informando cidade e CEP.</p></div></div>
+  <div class="formgrid">
+   <div class="field"><label for="newcity">Cidade / identificação da unidade</label><input id="newcity" placeholder="Ex.: Bauru"></div>
+   <div class="field"><label for="newcep">CEP da unidade</label><input id="newcep" inputmode="numeric" maxlength="9" placeholder="Ex.: 17010-000"></div>
+   <button id="add">+ Adicionar unidade</button>
+  </div>
+  <p class="helper">As unidades adicionadas ficam salvas neste navegador. Para disponibilizar para outros computadores, será necessário atualizar a base do site no GitHub.</p>
+  <div id="customlist"></div>
+ </div>
+ <div class="notice"><b>Sobre a precisão:</b> as unidades originais usam referências geográficas aproximadas de seus municípios/regiões, não os endereços exatos das filiais. As novas unidades usam o CEP cadastrado para localizar o endereço informado. A distância exibida é em linha reta, não por rodovia. Estoque, frete e prazo precisam ser confirmados separadamente.</div>
+</section>
+</main><footer>Serraf · Ferramenta auxiliar de localização comercial</footer>
+<script>
+const defaultUnits=[
+["Aricanduva","Aricanduva, São Paulo, SP, Brasil"],["Barueri","Barueri, SP, Brasil"],["Brasilândia","Brasilândia, São Paulo, SP, Brasil"],
+["Campinas","Campinas, SP, Brasil"],["Campo Limpo","Campo Limpo, São Paulo, SP, Brasil"],["Caraguatatuba","Caraguatatuba, SP, Brasil"],
+["Guarulhos","Guarulhos, SP, Brasil"],["Itaquaquecetuba","Itaquaquecetuba, SP, Brasil"],["Jundiaí","Jundiaí, SP, Brasil"],
+["Leme","Leme, SP, Brasil"],["Marília","Marília, SP, Brasil"],["Casa Verde (Matriz)","Casa Verde, São Paulo, SP, Brasil"],
+["Osasco I","Osasco, SP, Brasil"],["Osasco II","Osasco, SP, Brasil"],["Pimentas","Pimentas, Guarulhos, SP, Brasil"],
+["Piracicaba","Piracicaba, SP, Brasil"],["Presidente Prudente","Presidente Prudente, SP, Brasil"],["Ribeirão Preto","Ribeirão Preto, SP, Brasil"],
+["São Bernardo do Campo","São Bernardo do Campo, SP, Brasil"],["São José do Rio Preto","São José do Rio Preto, SP, Brasil"],
+["São José dos Campos I","São José dos Campos, SP, Brasil"],["São José dos Campos II","São José dos Campos, SP, Brasil"],
+["Sorocaba I","Sorocaba, SP, Brasil"],["Sorocaba II","Sorocaba, SP, Brasil"],["Suzano","Suzano, SP, Brasil"],["Tatuí","Tatuí, SP, Brasil"]
+];
+const $=id=>document.getElementById(id);
+let lastComparedRows=[];
+const storageKey="serraf_custom_units_v1";
+let customUnits=[];
+try{customUnits=JSON.parse(localStorage.getItem(storageKey)||"[]");if(!Array.isArray(customUnits))customUnits=[];}catch(e){customUnits=[];}
+const allUnits=()=>defaultUnits.map(([name,query])=>({name,query,custom:false})).concat(customUnits.map(x=>({...x,custom:true})));
+const digits=x=>x.replace(/\D/g,"");
+function formatCep(el){let x=digits(el.value).slice(0,8);el.value=x.length>5?x.slice(0,5)+"-"+x.slice(5):x;}
+$("cep").addEventListener("input",()=>formatCep($("cep")));
+$("newcep").addEventListener("input",()=>formatCep($("newcep")));
+function renderUnits(){
+ $("units").innerHTML=allUnits().map(x=>`<div class="unitrow"><span><strong>${escapeHtml(x.name)}</strong><small>${x.custom?"Unidade adicionada · CEP "+escapeHtml(x.cep):"Unidade Serraf"}</small></span>${x.custom?'<span class="rank">NOVA</span>':""}</div>`).join("");
+ $("customlist").innerHTML=customUnits.length?'<div style="margin-top:13px"><b style="font-size:13px">Unidades adicionadas neste navegador</b><div class="unitsgrid" style="margin-top:8px">'+customUnits.map((x,i)=>`<div class="unitrow"><span><strong>${escapeHtml(x.name)}</strong><small>CEP ${escapeHtml(x.cep)}</small></span><button class="danger" data-remove="${i}" title="Excluir unidade">Excluir</button></div>`).join("")+'</div></div>':'';
+ document.querySelectorAll("[data-remove]").forEach(b=>b.addEventListener("click",()=>{customUnits.splice(Number(b.dataset.remove),1);saveCustom();renderUnits();}));
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function saveCustom(){localStorage.setItem(storageKey,JSON.stringify(customUnits));}
+async function viaCep(cep){const r=await fetch("https://viacep.com.br/ws/"+digits(cep)+"/json/");if(!r.ok)throw Error("Não foi possível consultar o ViaCEP.");const d=await r.json();if(d.erro)throw Error("CEP não encontrado: "+cep);return d;}
+async function geocode(q){
+ const url="https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=br&q="+encodeURIComponent(q);
+ const r=await fetch(url);if(!r.ok)throw Error("Serviço de mapas indisponível (HTTP "+r.status+").");
+ const data=await r.json();if(!data.length)throw Error("Não foi possível localizar "+q+".");
+ return {lat:+data[0].lat,lon:+data[0].lon};
+}
+function km(a,b){const rad=x=>x*Math.PI/180,dl=rad(b.lat-a.lat),dn=rad(b.lon-a.lon),v=Math.sin(dl/2)**2+Math.cos(rad(a.lat))*Math.cos(rad(b.lat))*Math.sin(dn/2)**2;return 6371*2*Math.atan2(Math.sqrt(v),Math.sqrt(1-v));}
+const pause=ms=>new Promise(r=>setTimeout(r,ms));
+$("add").onclick=async()=>{
+ const name=$("newcity").value.trim(),cep=digits($("newcep").value);
+ if(!name||cep.length!==8){$("status").textContent="Preencha a cidade e um CEP válido para cadastrar a unidade.";return;}
+ const btn=$("add");btn.disabled=true;
+ try{
+  $("status").textContent="Validando o CEP da nova unidade...";
+  const d=await viaCep(cep);
+  if(customUnits.some(x=>digits(x.cep)===cep)){throw Error("Este CEP já está cadastrado nas unidades adicionais.");}
+  const label=name+(d.localidade&&!name.toLowerCase().includes(d.localidade.toLowerCase())?" · "+d.localidade:"");
+  customUnits.push({name:label,cep:cep.slice(0,5)+"-"+cep.slice(5),query:[d.logradouro,d.bairro,d.localidade,d.uf,"Brasil"].filter(Boolean).join(", ")});
+  saveCustom();renderUnits();$("newcity").value="";$("newcep").value="";
+  $("status").textContent="Unidade "+label+" adicionada com sucesso.";
+ }catch(e){$("status").textContent=e.message;}finally{btn.disabled=false;}
+};
+$("go").onclick=async()=>{
+ const cep=digits($("cep").value);if(cep.length!==8){$("status").textContent="Digite um CEP válido com 8 números.";return;}
+ const btn=$("go");btn.disabled=true;$("result").innerHTML="";$("destination").innerHTML="";$("nearestName").textContent="Calculando...";$("nearestDistance").textContent="Aguarde a comparação";
+ try{
+  $("status").textContent="Consultando CEP do cliente...";
+  const v=await viaCep(cep),address=[v.logradouro,v.bairro,v.localidade,v.uf,"Brasil"].filter(Boolean).join(", ");
+  $("destination").innerHTML=`<div class="destination"><b>Destino:</b> ${escapeHtml(address)} · CEP ${escapeHtml(v.cep)}</div>`;
+  $("status").textContent="Calculando proximidade das unidades. A primeira consulta pode levar um pouco mais...";
+  const dest=await geocode(address),cache=new Map(),rows=[];
+  for(const unit of allUnits()){
+   const key=unit.custom?"cep:"+digits(unit.cep):"city:"+unit.query;
+   if(!cache.has(key)){
+    if(unit.custom){const u=await viaCep(unit.cep);const q=[u.logradouro,u.bairro,u.localidade,u.uf,"Brasil"].filter(Boolean).join(", ");cache.set(key,await geocode(q));}
+    else cache.set(key,await geocode(unit.query));
+    await pause(1100);
+   }
+   rows.push({name:unit.name,km:km(dest,cache.get(key)),custom:unit.custom});
+  }
+  rows.sort((a,b)=>a.km-b.km);lastComparedRows=rows;
+  $("nearestName").textContent=rows[0].name;
+  $("nearestDistance").textContent=rows[0].km.toFixed(1)+" km · mais próxima";
+  applyFreight(rows[0].km);
+  $("result").innerHTML=`<div class="resulthead"><h4>Unidades mais próximas</h4><span class="pill">${rows.length} unidades comparadas</span></div><div class="grid">${rows.slice(0,10).map((x,i)=>`<div class="unit ${i===0?"best":""}"><div class="rank">${i===0?"★ MAIS PRÓXIMA":(i+1)+"ª OPÇÃO"}${x.custom?" · NOVA":""}</div><div class="unitname">${escapeHtml(x.name)}</div><div class="distance">${x.km.toFixed(1)} <small>km</small></div><div class="unitmeta">Distância aproximada em linha reta</div>${freightBadge(x.km)}</div>`).join("")}</div>`;
+  $("status").textContent="Comparação concluída. Confira os endereços e confirme estoque, frete e prazo com a unidade.";
+ }catch(e){$("status").textContent=e.message+" Confira a conexão e tente novamente.";}finally{btn.disabled=false;}
+};
+
+const freightKey="serraf_freight_ranges_v1";
+let freightRanges=[];
+try{freightRanges=JSON.parse(localStorage.getItem(freightKey)||"null")||[
+ {from:0,to:100,price:25},{from:100,to:200,price:40},{from:200,to:300,price:55},{from:300,to:400,price:70},{from:400,to:500,price:85}
+ ];}catch(e){freightRanges=[{from:0,to:100,price:25},{from:100,to:200,price:40},{from:200,to:300,price:55}];}
+const brl=n=>Number(n).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+function saveFreight(){localStorage.setItem(freightKey,JSON.stringify(freightRanges));}
+function renderFreight(){
+ freightRanges.sort((a,b)=>a.from-b.from);
+ $("freightRanges").innerHTML=freightRanges.length?freightRanges.map((r,i)=>`<div class="unitrow" style="margin-bottom:7px"><span><strong>${r.from} a ${r.to} km</strong><small>Taxa cadastrada: ${brl(r.price)}</small></span><button class="danger" data-freight-remove="${i}">Excluir</button></div>`).join(""):'<div class="empty">Nenhuma faixa cadastrada. Adicione uma faixa para calcular o frete.</div>';
+ document.querySelectorAll("[data-freight-remove]").forEach(b=>b.addEventListener("click",()=>{freightRanges.splice(Number(b.dataset.freightRemove),1);saveFreight();renderFreight();refreshResultFreight();}));
+}
+$("saveRange").addEventListener("click",()=>{
+ const from=Number($("rangeFrom").value),to=Number($("rangeTo").value),price=Number($("rangePrice").value);
+ if(!Number.isFinite(from)||!Number.isFinite(to)||!Number.isFinite(price)||from<0||to<=from||price<0){$("status").textContent="Confira a faixa: km inicial deve ser menor que km final e a taxa não pode ser negativa.";return;}
+ const overlaps=freightRanges.some(r=>from<r.to&&to>r.from);
+ if(overlaps){$("status").textContent="Essa faixa se sobrepõe a uma faixa já cadastrada. Ajuste os quilômetros ou exclua a faixa existente.";return;}
+ freightRanges.push({from,to,price});saveFreight();renderFreight();refreshResultFreight();$("status").textContent="Faixa de frete salva neste navegador.";
+});
+function findFreightRange(distance){
+  return freightRanges.find(r=>distance>=r.from&&(distance<r.to||(distance===r.to&&!freightRanges.some(n=>n.from===r.to))));
+}
+function freightBadge(distance){
+  const match=findFreightRange(distance);
+  return match
+    ? `<div class="unitfreight"><span>FRETE APROXIMADO</span><strong>${brl(match.price)}</strong></div>`
+    : `<div class="unitfreight missing"><span>FRETE APROXIMADO</span><strong>Não cadastrado</strong></div>`;
+}
+function refreshResultFreight(){
+  if(!lastComparedRows.length)return;
+  $("result").innerHTML=`<div class="resulthead"><h4>Unidades mais próximas</h4><span class="pill">${lastComparedRows.length} unidades comparadas</span></div><div class="grid">${lastComparedRows.slice(0,10).map((x,i)=>`<div class="unit ${i===0?"best":""}"><div class="rank">${i===0?"★ MAIS PRÓXIMA":(i+1)+"ª OPÇÃO"}${x.custom?" · NOVA":""}</div><div class="unitname">${escapeHtml(x.name)}</div><div class="distance">${x.km.toFixed(1)} <small>km</small></div><div class="unitmeta">Distância aproximada em linha reta</div>${freightBadge(x.km)}</div>`).join("")}</div>`;
+}
+function applyFreight(distance){
+ const match=findFreightRange(distance);
+ if(match){$("freightApplied").innerHTML=`<b>Frete estimado:</b> <span class="fee-total">${brl(match.price)}</span><div class="fee-detail">Faixa aplicada: ${match.from} a ${match.to} km · Unidade mais próxima a ${distance.toFixed(1)} km</div>`;}
+ else{$("freightApplied").innerHTML=`<b>Frete estimado:</b> <span style="color:#b45309">faixa não cadastrada</span><div class="fee-detail">Cadastre uma faixa que inclua ${distance.toFixed(1)} km.</div>`;}
+}
+$("cep").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();$("go").click();}});
+renderFreight();
+$("freightApplied").innerHTML="<b>Frete estimado:</b> aguardando consulta de CEP.";
+$("nearestFreight").textContent="—";
+renderUnits();
+</script></body></html>
